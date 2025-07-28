@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI YouTube Channel Analytics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary {
+            background-color: #ef4444; /* Red-500 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary:hover {
+            background-color: #dc2626; /* Red-600 */
+        }
+        .input-field {
+            border: 1px solid #d1d5db; /* Gray-300 */
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #ef4444;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">AI YouTube Channel Growth Analytics</h1>
+
+        <!-- Connect YouTube Channel Input -->
+        <div class="card mb-6">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">🔗 Connect Your YouTube Channel</h2>
+            <p class="text-gray-600 mb-4">Enter your YouTube Channel URL to get personalized insights.</p>
+            <div class="mb-4">
+                <label for="channelUrlInput" class="block text-gray-700 text-sm font-bold mb-2">YouTube Channel URL:</label>
+                <input type="url" id="channelUrlInput" class="input-field" placeholder="e.g., https://www.youtube.com/channel/UC_x5XG1J2J3J4J5J6J7J8J9">
+            </div>
+            <button id="connectChannelBtn" class="btn-primary">Connect Channel</button>
+            <p id="channelStatus" class="text-gray-600 mt-2 italic hidden"></p>
+        </div>
+
+        <!-- User ID Display (Firestore requirement, even if not fully implemented) -->
+        <div class="card text-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">Your User ID (for multi-user features):</h2>
+            <p id="userIdDisplay" class="text-lg font-mono text-gray-600 break-all">Loading User ID...</p>
+        </div>
+
+        <!-- Simplified Performance Reports -->
+        <div class="card">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">📊 Simplified Performance Reports</h2>
+            <p class="text-gray-600 mb-4">Get easy-to-understand reports on your key metrics.</p>
+            <div id="simplifiedReportsContent" class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-xl font-medium text-gray-800 mb-2">Monthly Channel Overview (Simulated)</h3>
+                <ul class="list-disc list-inside text-gray-700">
+                    <li><strong>Total Views:</strong> 1,250,000 (+15% vs. last month)</li>
+                    <li><strong>New Subscribers:</strong> 12,500 (+20% vs. last month)</li>
+                    <li><strong>Average Watch Time:</strong> 6:30 (+5% vs. last month)</li>
+                    <li><strong>Engagement Rate:</strong> 8.2% (Likes + Comments / Views)</li>
+                </ul>
+                <p class="mt-4 text-gray-700 italic">"Your channel shows strong growth in views and subscribers, indicating effective content and discoverability. Focus on increasing average watch time further by optimizing video pacing."</p>
+            </div>
+        </div>
+
+        <!-- Video Comparison & Benchmarking -->
+        <div class="card">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">📈 Video Comparison & Benchmarking</h2>
+            <p class="text-gray-600 mb-4">Compare your video performance and identify best practices.</p>
+            <div id="videoComparisonContent" class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-xl font-medium text-gray-800 mb-2">Top 3 Performing Videos (Simulated)</h3>
+                <div class="mb-4">
+                    <p class="font-semibold">1. "Ultimate SEO Guide 2024"</p>
+                    <ul class="list-disc list-inside text-gray-700 text-sm">
+                        <li>Views: 500,000</li>
+                        <li>Watch Time: 12:45</li>
+                        <li>Engagement: 10.5%</li>
+                        <li>Insight: Long-form, in-depth tutorials perform exceptionally well.</li>
+                    </ul>
+                </div>
+                <div class="mb-4">
+                    <p class="font-semibold">2. "5 AI Tools for Content Creation"</p>
+                    <ul class="list-disc list-inside text-gray-700 text-sm">
+                        <li>Views: 350,000</li>
+                        <li>Watch Time: 8:10</li>
+                        <li>Engagement: 9.8%</li>
+                        <li>Insight: List-based videos on trending topics drive high clicks.</li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="font-semibold">3. "My YouTube Studio Setup Tour"</p>
+                    <ul class="list-disc list-inside text-gray-700 text-sm">
+                        <li>Views: 200,000</li>
+                        <li>Watch Time: 7:00</li>
+                        <li>Engagement: 11.2%</li>
+                        <li>Insight: Personal, behind-the-scenes content fosters strong community engagement.</li>
+                    </ul>
+                </div>
+                <p class="mt-4 text-gray-700 italic">"Your audience responds well to both educational, long-form content and engaging, list-based videos. Consider mixing these formats for diverse appeal."</p>
+            </div>
+        </div>
+
+        <!-- Algorithmic Insights & Trend Prediction -->
+        <div class="card">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">🧠 Algorithmic Insights & Trend Prediction</h2>
+            <p class="text-gray-600 mb-4">Understand the YouTube algorithm and predict future trends.</p>
+            <button id="getAlgorithmicInsightBtn" class="btn-primary flex items-center">
+                Get AI Algorithmic Insight
+                <span id="algorithmicInsightLoading" class="loading-spinner hidden"></span>
+            </button>
+            <div id="algorithmicInsightResult" class="bg-gray-50 p-4 rounded-lg mt-4 hidden">
+                <h3 class="text-xl font-medium text-gray-800 mb-2">AI Insight:</h3>
+                <p id="algorithmicInsightText" class="text-gray-700"></p>
+            </div>
+        </div>
+
+        <!-- Audience Demographics & Psychographics -->
+        <div class="card">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">👥 Audience Psychographics</h2>
+            <p class="text-gray-600 mb-4">Gain deeper insights into your audience's interests and behaviors.</p>
+            <button id="getAudiencePsychographicsBtn" class="btn-primary flex items-center">
+                Get AI Audience Psychographics
+                <span id="audiencePsychographicsLoading" class="loading-spinner hidden"></span>
+            </button>
+            <div id="audiencePsychographicsResult" class="bg-gray-50 p-4 rounded-lg mt-4 hidden">
+                <h3 class="text-xl font-medium text-gray-800 mb-2">AI Insight:</h3>
+                <p id="audiencePsychographicsText" class="text-gray-700"></p>
+            </div>
+        </div>
+
+        <!-- Keyword & Topic Performance Analysis -->
+        <div class="card">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">🔍 Keyword & Topic Performance Analysis</h2>
+            <p class="text-gray-600 mb-4">Identify top-performing keywords and topics for your channel.</p>
+            <div class="mb-4">
+                <label for="keywordInput" class="block text-gray-700 text-sm font-bold mb-2">Enter a Keyword/Topic:</label>
+                <input type="text" id="keywordInput" class="input-field" placeholder="e.g., 'AI tools', 'video editing tips'">
+            </div>
+            <button id="analyzeKeywordBtn" class="btn-primary">Analyze Keyword Performance</button>
+            <div id="keywordAnalysisResult" class="bg-gray-50 p-4 rounded-lg mt-4 hidden">
+                <h3 class="text-xl font-medium text-gray-800 mb-2">Analysis for "<span id="analyzedKeyword"></span>":</h3>
+                <p class="text-gray-700"><strong>Search Volume (Simulated):</strong> High</p>
+                <p class="text-gray-700"><strong>Competition (Simulated):</strong> Medium</p>
+                <p class="text-gray-700"><strong>Your Channel Performance (Simulated):</strong> Your videos on this topic have an average view count 20% higher than your channel average, indicating strong audience interest. Consider creating more content around this theme.</p>
+            </div>
+        </div>
+
+        <!-- "What If" Scenario Modeling (Predictive Modeling) -->
+        <div class="card">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">🔮 "What If" Scenario Modeling</h2>
+            <p class="text-gray-600 mb-4">Predict potential outcomes of different content strategies.</p>
+            <div class="mb-4">
+                <label for="scenarioInput" class="block text-gray-700 text-sm font-bold mb-2">Describe your scenario:</label>
+                <textarea id="scenarioInput" class="input-field h-24" placeholder="e.g., 'If I post a 15-minute tutorial on Mondays at 3 PM', 'If I collaborate with a channel of similar size'"></textarea>
+            </div>
+            <button id="predictScenarioBtn" class="btn-primary flex items-center">
+                Predict Outcome
+                <span id="scenarioPredictLoading" class="loading-spinner hidden"></span>
+            </button>
+            <div id="scenarioPredictionResult" class="bg-gray-50 p-4 rounded-lg mt-4 hidden">
+                <h3 class="text-xl font-medium text-gray-800 mb-2">Predicted Outcome:</h3>
+                <p id="scenarioPredictionText" class="text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Firebase imports (for user ID, even if full Firestore isn't used for this specific app)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables for Firebase config and app ID
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app, db, auth, userId;
+
+        /**
+         * Initializes Firebase and authenticates the user.
+         */
+        async function initializeFirebase() {
+            try {
+                // Check if firebaseConfig is not empty before initializing
+                if (Object.keys(firebaseConfig).length > 0) {
+                    app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    // Listen for auth state changes
+                    onAuthStateChanged(auth, (user) => {
+                        if (user) {
+                            userId = user.uid;
+                            document.getElementById('userIdDisplay').textContent = userId;
+                        } else {
+                            // If user logs out or is not authenticated, generate a random ID
+                            userId = crypto.randomUUID();
+                            document.getElementById('userIdDisplay').textContent = `Anonymous User: ${userId}`;
+                        }
+                    });
+
+                    // Sign in with custom token if available, otherwise anonymously
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } else {
+                    console.warn("Firebase config not found. Running without Firebase authentication.");
+                    userId = crypto.randomUUID(); // Fallback to random ID if Firebase not configured
+                    document.getElementById('userIdDisplay').textContent = `Anonymous User (No Firebase): ${userId}`;
+                }
+            } catch (error) {
+                console.error("Error initializing Firebase or authenticating:", error);
+                userId = crypto.randomUUID(); // Fallback to random ID on error
+                document.getElementById('userIdDisplay').textContent = `Error: ${error.message}. Using Anonymous ID: ${userId}`;
+            }
+        }
+
+        // Initialize Firebase on window load
+        window.onload = initializeFirebase;
+
+        // Gemini API configuration
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=`;
+        const apiKey = ""; // Canvas will automatically provide the API key at runtime
+
+        /**
+         * Calls the Gemini API to generate content.
+         * @param {string} prompt - The prompt for the AI.
+         * @param {HTMLElement} loadingElement - The loading spinner element.
+         * @returns {Promise<string>} - The generated text.
+         */
+        async function callGeminiAPI(prompt, loadingElement) {
+            loadingElement.classList.remove('hidden'); // Show loading spinner
+            try {
+                const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+
+                const response = await fetch(GEMINI_API_URL + apiKey, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API error: ${response.status} - ${errorData.error.message || 'Unknown error'}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    console.error("Unexpected API response structure:", result);
+                    return "Could not generate insight. Unexpected API response.";
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                return `Error generating insight: ${error.message}`;
+            } finally {
+                loadingElement.classList.add('hidden'); // Hide loading spinner
+            }
+        }
+
+        // --- Connect YouTube Channel ---
+        const channelUrlInput = document.getElementById('channelUrlInput');
+        const connectChannelBtn = document.getElementById('connectChannelBtn');
+        const channelStatus = document.getElementById('channelStatus');
+
+        connectChannelBtn.addEventListener('click', () => {
+            const url = channelUrlInput.value.trim();
+            if (url) {
+                // In a real application, this is where you would validate the URL
+                // and initiate the YouTube Data API authentication flow.
+                channelStatus.textContent = `Attempting to connect to: ${url}`;
+                channelStatus.classList.remove('hidden');
+                // Simulate a successful connection
+                setTimeout(() => {
+                    channelStatus.textContent = `Successfully connected to: ${url}. (Simulated)`;
+                }, 1500);
+            } else {
+                channelStatus.textContent = "Please enter a valid YouTube Channel URL.";
+                channelStatus.classList.remove('hidden');
+            }
+        });
+
+
+        // --- Algorithmic Insights ---
+        const getAlgorithmicInsightBtn = document.getElementById('getAlgorithmicInsightBtn');
+        const algorithmicInsightResult = document.getElementById('algorithmicInsightResult');
+        const algorithmicInsightText = document.getElementById('algorithmicInsightText');
+        const algorithmicInsightLoading = document.getElementById('algorithmicInsightLoading');
+
+        getAlgorithmicInsightBtn.addEventListener('click', async () => {
+            const prompt = `Based on typical YouTube algorithm behavior, provide a concise insight (max 100 words) on how a channel's consistent upload schedule (e.g., twice a week) and high viewer retention (e.g., 60% average) for 8-10 minute videos in the 'tech review' niche would likely impact its discoverability and growth. Focus on key algorithmic signals.`;
+            algorithmicInsightResult.classList.remove('hidden');
+            algorithmicInsightText.textContent = "Generating AI insight...";
+            const insight = await callGeminiAPI(prompt, algorithmicInsightLoading);
+            algorithmicInsightText.textContent = insight;
+        });
+
+        // --- Audience Psychographics ---
+        const getAudiencePsychographicsBtn = document.getElementById('getAudiencePsychographicsBtn');
+        const audiencePsychographicsResult = document.getElementById('audiencePsychographicsResult');
+        const audiencePsychographicsText = document.getElementById('audiencePsychographicsText');
+        const audiencePsychographicsLoading = document.getElementById('audiencePsychographicsLoading');
+
+        getAudiencePsychographicsBtn.addEventListener('click', async () => {
+            const prompt = `Imagine a YouTube channel whose audience primarily consists of males aged 25-34, located in urban areas, who frequently watch videos on personal finance, productivity hacks, and emerging technologies. Based on these demographics and interests, generate a psychographic profile (max 100 words) describing their likely values, aspirations, and pain points.`;
+            audiencePsychographicsResult.classList.remove('hidden');
+            audiencePsychographicsText.textContent = "Generating AI insight...";
+            const insight = await callGeminiAPI(prompt, audiencePsychographicsLoading);
+            audiencePsychographicsText.textContent = insight;
+        });
+
+        // --- Keyword & Topic Performance Analysis ---
+        const analyzeKeywordBtn = document.getElementById('analyzeKeywordBtn');
+        const keywordInput = document.getElementById('keywordInput');
+        const keywordAnalysisResult = document.getElementById('keywordAnalysisResult');
+        const analyzedKeyword = document.getElementById('analyzedKeyword');
+
+        analyzeKeywordBtn.addEventListener('click', () => {
+            const keyword = keywordInput.value.trim();
+            if (keyword) {
+                analyzedKeyword.textContent = keyword;
+                keywordAnalysisResult.classList.remove('hidden');
+                // In a real application, this would involve a backend call to YouTube Analytics or a keyword research tool.
+                // Here, we provide a simulated, generic response.
+            } else {
+                alert("Please enter a keyword or topic to analyze.");
+            }
+        });
+
+        // --- "What If" Scenario Modeling ---
+        const predictScenarioBtn = document.getElementById('predictScenarioBtn');
+        const scenarioInput = document.getElementById('scenarioInput');
+        const scenarioPredictionResult = document.getElementById('scenarioPredictionResult');
+        const scenarioPredictionText = document.getElementById('scenarioPredictionText');
+        const scenarioPredictLoading = document.getElementById('scenarioPredictLoading');
+
+        predictScenarioBtn.addEventListener('click', async () => {
+            const scenario = scenarioInput.value.trim();
+            if (scenario) {
+                const prompt = `Given the scenario: "${scenario}", predict a plausible outcome for a YouTube channel focused on educational content, considering typical platform dynamics and audience behavior. Keep the prediction concise (max 100 words) and actionable.`;
+                scenarioPredictionResult.classList.remove('hidden');
+                scenarioPredictionText.textContent = "Predicting outcome...";
+                const prediction = await callGeminiAPI(prompt, scenarioPredictLoading);
+                scenarioPredictionText.textContent = prediction;
+            } else {
+                alert("Please describe a scenario to predict its outcome.");
+            }
+        });
+
+    </script>
+</body>
+</html>
